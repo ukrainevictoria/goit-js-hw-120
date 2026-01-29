@@ -10,17 +10,20 @@ import {
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-const form = document.querySelector("#search-form");
+// DOM elements
+const searchForm = document.querySelector(".form");
+const searchInput = document.querySelector(".form input[name='search-text']");
 const loadMoreBtn = document.querySelector(".load-more");
 
 let currentQuery = "";
 let currentPage = 1;
 let totalHits = 0;
 
-form.addEventListener("submit", async (event) => {
+// Сабміт форми
+searchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  currentQuery = event.target.search.value.trim();
+  currentQuery = searchInput.value.trim();
   if (!currentQuery) {
     iziToast.error({ message: "Please enter a search term!" });
     return;
@@ -57,6 +60,7 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
+// Load More
 loadMoreBtn.addEventListener("click", async () => {
   currentPage += 1;
   showLoader();

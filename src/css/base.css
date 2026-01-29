@@ -1,3 +1,4 @@
+/* ===== GENERAL ===== */
 :root {
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
@@ -30,34 +31,57 @@ header {
   text-align: center;
 }
 
-#search-form {
+/* ===== SEARCH FORM ===== */
+.form {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 16px;
+  margin: 24px auto 32px;
 }
 
-#search-form input {
-  padding: 8px 12px;
-  width: 250px;
-  font-size: 14px;
+/* Інпут пошуку */
+.form input[name="search-text"] {
+  width: 371px;
+  height: 40px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#search-form button {
   padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5; /* ~24px */
+  letter-spacing: 0.04em;
+  color: #808080;
+  outline: none;
+}
+
+.form input[name="search-text"]::placeholder {
+  color: #808080;
+}
+
+/* Кнопка Search */
+.form button {
+  width: 91px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 8px 16px;
   border: none;
-  background-color: #2e2f42;
+  background: #4e75ff;
   color: #fff;
-  border-radius: 4px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-#search-form button:hover {
-  background-color: #454661;
+.form button:hover {
+  background: #3a5bdc;
 }
 
+/* ===== GALLERY ===== */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -66,6 +90,7 @@ header {
   padding: 0;
 }
 
+/* ===== GALLERY ITEM ===== */
 .gallery-item {
   border: 1px solid #e0e0e0;
   background-color: #fff;
@@ -82,6 +107,7 @@ header {
   display: block;
 }
 
+/* ===== INFO METRICS ===== */
 .info {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -97,6 +123,7 @@ header {
   font-weight: 600;
   font-size: 12px;
   line-height: 1.33;
+  letter-spacing: 0.04em;
   color: #2e2f42;
   display: block;
 }
@@ -104,22 +131,26 @@ header {
 .metric-value {
   font-weight: 400;
   font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.04em;
   color: #2e2f42;
   display: block;
   margin-top: 2px;
 }
 
+/* ===== LOAD MORE BUTTON ===== */
 .load-more {
   display: none;
   margin: 20px auto;
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   border: none;
-  background-color: #2e2f42;
+  border-radius: 8px;
+  background-color: #4e75ff;
   color: #fff;
-  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .load-more.visible {
@@ -127,9 +158,10 @@ header {
 }
 
 .load-more:hover {
-  background-color: #454661;
+  background-color: #3a5bdc;
 }
 
+/* ===== LOADER ===== */
 .loader {
   display: none;
   text-align: center;
