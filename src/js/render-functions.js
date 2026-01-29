@@ -1,10 +1,12 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-const gallery = document.querySelector('.gallery');
+const gallery = document.querySelector(".gallery");
+const loader = document.querySelector(".loader");
+const loadMoreBtn = document.querySelector(".load-more");
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
+export const lightbox = new SimpleLightbox(".gallery a", {
+  captionsData: "alt",
   captionDelay: 250,
 });
 
@@ -20,45 +22,53 @@ export function createGallery(images) {
         comments,
         downloads,
       }) => `
-        <li class="gallery-item">
-          <a href="${largeImageURL}">
-            <img
-              src="${webformatURL}"
-              alt="${tags}"
-              loading="lazy"
-            />
-          </a>
-          <p class="info">
-            <span><b>Likes:</b> ${likes}</span>
-            <span><b>Views:</b> ${views}</span>
-            <span><b>Comments:</b> ${comments}</span>
-            <span><b>Downloads:</b> ${downloads}</span>
-          </p>
-        </li>
-      `
+      <li class="gallery-item">
+        <a href="${largeImageURL}">
+          <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+        </a>
+        <div class="info">
+          <div class="info-item">
+            <span class="metric-label">Likes</span>
+            <span class="metric-value">${likes}</span>
+          </div>
+          <div class="info-item">
+            <span class="metric-label">Views</span>
+            <span class="metric-value">${views}</span>
+          </div>
+          <div class="info-item">
+            <span class="metric-label">Comments</span>
+            <span class="metric-value">${comments}</span>
+          </div>
+          <div class="info-item">
+            <span class="metric-label">Downloads</span>
+            <span class="metric-value">${downloads}</span>
+          </div>
+        </div>
+      </li>
+    `
     )
-    .join('');
+    .join("");
 
-  gallery.insertAdjacentHTML('beforeend', markup);
+  gallery.insertAdjacentHTML("beforeend", markup);
   lightbox.refresh();
 }
 
 export function clearGallery() {
-  gallery.innerHTML = '';
+  gallery.innerHTML = "";
 }
 
 export function showLoader() {
-  document.querySelector('.loader').classList.remove('hidden');
+  loader.classList.add("visible");
 }
 
 export function hideLoader() {
-  document.querySelector('.loader').classList.add('hidden');
+  loader.classList.remove("visible");
 }
 
 export function showLoadMoreButton() {
-  document.querySelector('.load-more').classList.remove('hidden');
+  loadMoreBtn.classList.add("visible");
 }
 
 export function hideLoadMoreButton() {
-  document.querySelector('.load-more').classList.add('hidden');
+  loadMoreBtn.classList.remove("visible");
 }

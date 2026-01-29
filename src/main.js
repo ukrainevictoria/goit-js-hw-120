@@ -1,4 +1,4 @@
-import { getImagesByQuery } from './js/pixabay-api.js';
+import { getImagesByQuery, PER_PAGE } from "./js/pixabay-api.js";
 import {
   createGallery,
   clearGallery,
@@ -6,39 +6,39 @@ import {
   hideLoader,
   showLoadMoreButton,
   hideLoadMoreButton,
-} from './js/render-functions.js';
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+} from "./js/render-functions.js";
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
-const form = document.querySelector('#search-form');
-const loadMoreBtn = document.querySelector('.load-more');
+const form = document.querySelector("#search-form");
+const loadMoreBtn = document.querySelector(".load-more");
 
-let query = '';
-let page = 1;
+let currentQuery = "";
+let currentPage = 1;
 let totalHits = 0;
-const PER_PAGE = 15;
 
-// 🔍 Сабміт форми (перший пошук)
-form.addEventListener('submit', async event => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  query = event.target.search.value.trim();
-  if (!query) return;
+  currentQuery = event.target.search.value.trim();
+  if (!currentQuery) {
+    iziToast.error({ message: "Please enter a search term!" });
+    return;
+  }
 
-  page = 1;
+  currentPage = 1;
   totalHits = 0;
-
   clearGallery();
   hideLoadMoreButton();
   showLoader();
 
   try {
-    const data = await getImagesByQuery(query, page);
+    const data = await getImagesByQuery(currentQuery, currentPage);
     totalHits = data.totalHits;
 
     if (data.hits.length === 0) {
-      iziToast.error({
-        message: 'Sorry, there are no images matching your search query.',
+      iziToast.info({
+        message: "Sorry, there are no images matching your search query.",
       });
       hideLoader();
       return;
@@ -47,39 +47,32 @@ form.addEventListener('submit', async event => {
     createGallery(data.hits);
     hideLoader();
 
-    if (page * PER_PAGE < totalHits) {
+    if (currentPage * PER_PAGE < totalHits) {
       showLoadMoreButton();
     }
-  } catch {
-    iziToast.error({
-      message: 'Something went wrong. Please try again.',
-    });
+  } catch (error) {
+    console.error(error);
+    iziToast.error({ message: "Something went wrong. Please try again." });
     hideLoader();
   }
 });
 
-// ➕ Load more
-loadMoreBtn.addEventListener('click', async () => {
-  page += 1;
+loadMoreBtn.addEventListener("click", async () => {
+  currentPage += 1;
   showLoader();
   hideLoadMoreButton();
 
   try {
-    const data = await getImagesByQuery(query, page);
+    const data = await getImagesByQuery(currentQuery, currentPage);
     createGallery(data.hits);
     hideLoader();
 
-    // 🔽 Плавний скрол
     const cardHeight = document
-      .querySelector('.gallery li')
+      .querySelector(".gallery li")
       .getBoundingClientRect().height;
+    window.scrollBy({ top: cardHeight * 2, behavior: "smooth" });
 
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-
-    if (page * PER_PAGE >= totalHits) {
+    if (currentPage * PER_PAGE >= totalHits) {
       hideLoadMoreButton();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
@@ -87,10 +80,9 @@ loadMoreBtn.addEventListener('click', async () => {
     } else {
       showLoadMoreButton();
     }
-  } catch {
-    iziToast.error({
-      message: 'Something went wrong. Please try again.',
-    });
+  } catch (error) {
+    console.error(error);
+    iziToast.error({ message: "Something went wrong. Please try again." });
     hideLoader();
   }
 });
