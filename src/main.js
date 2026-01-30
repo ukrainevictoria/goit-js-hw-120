@@ -19,8 +19,8 @@ let currentQuery = "";
 let currentPage = 1;
 let totalHits = 0;
 
-// Сабміт форми
-searchForm.addEventListener("submit", async (event) => {
+// 🔍 Сабміт форми
+searchForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   currentQuery = searchInput.value.trim();
@@ -43,24 +43,29 @@ searchForm.addEventListener("submit", async (event) => {
       iziToast.info({
         message: "Sorry, there are no images matching your search query.",
       });
-      hideLoader();
       return;
     }
 
     createGallery(data.hits);
-    hideLoader();
 
-    if (currentPage * PER_PAGE < totalHits) {
+    //  Перевірка після першого запиту
+    if (currentPage * PER_PAGE >= totalHits) {
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+      });
+      hideLoadMoreButton();
+    } else {
       showLoadMoreButton();
     }
   } catch (error) {
     console.error(error);
     iziToast.error({ message: "Something went wrong. Please try again." });
+  } finally {
     hideLoader();
   }
 });
 
-// Load More
+//  Load More
 loadMoreBtn.addEventListener("click", async () => {
   currentPage += 1;
   showLoader();
@@ -69,12 +74,15 @@ loadMoreBtn.addEventListener("click", async () => {
   try {
     const data = await getImagesByQuery(currentQuery, currentPage);
     createGallery(data.hits);
-    hideLoader();
 
     const cardHeight = document
       .querySelector(".gallery li")
       .getBoundingClientRect().height;
-    window.scrollBy({ top: cardHeight * 2, behavior: "smooth" });
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
+    });
 
     if (currentPage * PER_PAGE >= totalHits) {
       hideLoadMoreButton();
@@ -87,6 +95,7 @@ loadMoreBtn.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     iziToast.error({ message: "Something went wrong. Please try again." });
+  } finally {
     hideLoader();
   }
 });
